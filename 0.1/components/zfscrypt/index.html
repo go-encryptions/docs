@@ -21,7 +21,7 @@
       
       
       <link rel="icon" href="../../assets/logo.svg">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -29,7 +29,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -675,7 +675,7 @@
 
 <h1 id="zfscrypt-openzfs-encryption-core">zfscrypt — OpenZFS encryption core</h1>
 <p><code>github.com/go-encryptions/zfscrypt</code></p>
-<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="s">&quot;github.com/go-encryptions/zfscrypt&quot;</span>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="s">"github.com/go-encryptions/zfscrypt"</span>
 </code></pre></div>
 <p>Package <code>zfscrypt</code> implements the cryptographic primitives used by <strong>OpenZFS
 native (dataset-level) encryption</strong>, as added in OpenZFS 0.8 (2019) and stable
@@ -781,10 +781,10 @@ do not "upgrade" it without a corresponding format change.</p>
 <p>Helpers: <code>Suite.KeyLen() int</code>, <code>Suite.IsCCM() bool</code>, <code>Suite.String() string</code>.</p>
 <p>Fixed sizes (ZFS uses 12-byte IVs and 16-byte MACs uniformly):</p>
 <div class="highlight"><pre><span></span><code><span class="kd">const</span><span class="w"> </span><span class="p">(</span>
-<span class="w">    </span><span class="nx">IVSize</span><span class="w">         </span><span class="p">=</span><span class="w"> </span><span class="mi">12</span><span class="w"> </span><span class="c1">// per-block / unwrap IV</span>
-<span class="w">    </span><span class="nx">MACSize</span><span class="w">        </span><span class="p">=</span><span class="w"> </span><span class="mi">16</span><span class="w"> </span><span class="c1">// authentication tag</span>
-<span class="w">    </span><span class="nx">WrappingKeyLen</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="c1">// always AES-256 wraps the MEK</span>
-<span class="w">    </span><span class="nx">WrappedKeySize</span><span class="w"> </span><span class="p">=</span><span class="w"> </span><span class="mi">64</span><span class="w"> </span><span class="c1">// 32-byte MEK || 32-byte HMAC key</span>
+<span class="w">    </span><span class="nx">IVSize</span><span class="w">         </span><span class="o">=</span><span class="w"> </span><span class="mi">12</span><span class="w"> </span><span class="c1">// per-block / unwrap IV</span>
+<span class="w">    </span><span class="nx">MACSize</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="mi">16</span><span class="w"> </span><span class="c1">// authentication tag</span>
+<span class="w">    </span><span class="nx">WrappingKeyLen</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">32</span><span class="w"> </span><span class="c1">// always AES-256 wraps the MEK</span>
+<span class="w">    </span><span class="nx">WrappedKeySize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">64</span><span class="w"> </span><span class="c1">// 32-byte MEK || 32-byte HMAC key</span>
 <span class="p">)</span>
 </code></pre></div>
 <h2 id="api">API</h2>
@@ -808,7 +808,7 @@ do not "upgrade" it without a corresponding format change.</p>
 <span class="kd">func</span><span class="w"> </span><span class="nx">DecryptBlock</span><span class="p">(</span><span class="nx">suite</span><span class="w"> </span><span class="nx">Suite</span><span class="p">,</span><span class="w"> </span><span class="nx">key</span><span class="p">,</span><span class="w"> </span><span class="nx">iv</span><span class="p">,</span><span class="w"> </span><span class="nx">mac</span><span class="p">,</span><span class="w"> </span><span class="nx">ciphertext</span><span class="p">,</span><span class="w"> </span><span class="nx">ad</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
 
 <span class="c1">// HMAC returns HMAC-SHA512 over data, truncated to 32 bytes, using</span>
-<span class="c1">// the dataset&#39;s HMAC key — for metadata that bypasses the AEAD</span>
+<span class="c1">// the dataset's HMAC key — for metadata that bypasses the AEAD</span>
 <span class="c1">// layer (e.g. the per-block salt).</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">HMAC</span><span class="p">(</span><span class="nx">hmacKey</span><span class="p">,</span><span class="w"> </span><span class="nx">data</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">)</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span>
 </code></pre></div>
@@ -894,7 +894,7 @@ for CCM suites or <code>cipher.NewGCMWithNonceSize(block, 12)</code> for GCM —
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "content.code.copy", "search.suggest"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": {"provider": "mike"}}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
