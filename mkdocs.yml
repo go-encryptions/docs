@@ -1,5 +1,5 @@
 site_name: go-encryptions
-site_description: Pure-Go (standard-library only) encryption primitives — AES-CCM AEAD and the cryptographic core of OpenZFS native dataset encryption. No cgo, no third-party crypto.
+site_description: Pure-Go encryption primitives — XTS-AES and AES-CBC for disk encryption with assembly kernels, AES-CCM AEAD, Serpent, and the cryptographic core of OpenZFS native dataset encryption. No cgo.
 site_url: https://go-encryptions.github.io/docs/
 repo_url: https://github.com/go-encryptions
 repo_name: go-encryptions
@@ -39,6 +39,8 @@ nav:
   - Home: index.md
   - Components:
       - Overview: components/index.md
+      - "xts — XTS-AES": components/xts.md
+      - "cbc — AES-CBC": components/cbc.md
       - "ccm — AES-CCM AEAD": components/ccm.md
       - "zfscrypt — OpenZFS encryption core": components/zfscrypt.md
       - "serpent — Serpent block cipher": components/serpent.md
