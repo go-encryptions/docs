@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Pure-Go (standard-library only) encryption primitives — AES-CCM AEAD and the cryptographic core of OpenZFS native dataset encryption. No cgo, no third-party crypto.">
+        <meta name="description" content="Pure-Go encryption primitives — XTS-AES and AES-CBC for disk encryption with assembly kernels, AES-CCM AEAD, Serpent, and the cryptographic core of OpenZFS native dataset encryption. No cgo.">
       
       
       
@@ -16,7 +16,7 @@
         <link rel="prev" href="..">
       
       
-        <link rel="next" href="ccm/">
+        <link rel="next" href="xts/">
       
       
         
@@ -433,6 +433,62 @@
   
   
     <li class="md-nav__item">
+      <a href="xts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xts — XTS-AES
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="cbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cbc — AES-CBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="ccm/" class="md-nav__link">
         
   
@@ -572,8 +628,9 @@
 
 
 <h1 id="components">Components</h1>
-<p><code>go-encryptions</code> is a set of dependency-free Go modules (standard library only,
-<code>CGO_ENABLED=0</code>). <code>zfscrypt</code> builds directly on <code>ccm</code>; nothing else is required.</p>
+<p><code>go-encryptions</code> is a set of pure-Go modules (<code>CGO_ENABLED=0</code>). <code>zfscrypt</code>
+builds directly on <code>ccm</code>. <code>xts</code> and <code>cbc</code> add assembly kernels for amd64 and
+arm64, with a portable path everywhere else.</p>
 <table>
 <thead>
 <tr>
@@ -584,6 +641,18 @@
 </tr>
 </thead>
 <tbody>
+<tr>
+<td><a href="xts/"><code>xts</code></a></td>
+<td><code>github.com/go-encryptions/xts</code></td>
+<td>mode</td>
+<td>XTS-AES (IEEE P1619, NIST SP 800-38E), a drop-in for <code>golang.org/x/crypto/xts</code> with byte-identical output. A fused 8-block arm64 kernel, plus <code>DecryptSectors</code>; ahead of OpenSSL on one core.</td>
+</tr>
+<tr>
+<td><a href="cbc/"><code>cbc</code></a></td>
+<td><code>github.com/go-encryptions/cbc</code></td>
+<td>mode</td>
+<td>AES-CBC for disk encryption: an 8-block arm64 decryption kernel, plus per-sector IVs (eboiv, essiv) 8 at a time. Byte-identical to <code>crypto/cipher</code>; ahead of OpenSSL on one core.</td>
+</tr>
 <tr>
 <td><a href="ccm/"><code>ccm</code></a></td>
 <td><code>github.com/go-encryptions/ccm</code></td>

@@ -6,7 +6,7 @@
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
       
-        <meta name="description" content="Pure-Go (standard-library only) encryption primitives — AES-CCM AEAD and the cryptographic core of OpenZFS native dataset encryption. No cgo, no third-party crypto.">
+        <meta name="description" content="Pure-Go encryption primitives — XTS-AES and AES-CBC for disk encryption with assembly kernels, AES-CCM AEAD, Serpent, and the cryptographic core of OpenZFS native dataset encryption. No cgo.">
       
       
       
@@ -440,6 +440,62 @@
   
   
     <li class="md-nav__item">
+      <a href="components/xts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    xts — XTS-AES
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="components/cbc/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cbc — AES-CBC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="components/ccm/" class="md-nav__link">
         
   
@@ -590,17 +646,20 @@
 
 
 <h1 id="go-encryptions">go-encryptions</h1>
-<p>Pure-Go <strong>encryption primitives</strong>, standard library only — no cgo, no
-<code>golang.org/x/crypto</code>, no third-party crypto dependencies.</p>
-<p>The org fills gaps the Go standard library leaves open and assembles them into
-the cryptographic core of real on-disk encryption formats. Today that means two
-modules: a self-contained <strong>AES-CCM</strong> AEAD (which stdlib does not provide), and
-<strong>zfscrypt</strong>, the "math" half of OpenZFS native dataset encryption built on top
-of it.</p>
+<p>Pure-Go <strong>encryption primitives</strong>, with no cgo.</p>
+<p>The org fills gaps that the Go standard library and <code>golang.org/x/crypto</code>
+leave open, and assembles them into the cryptographic core of real on-disk
+encryption formats. It has three kinds of module:</p>
+<ul>
+<li><strong>disk-encryption modes</strong> (<code>xts</code>, <code>cbc</code>), with assembly kernels ahead of
+  OpenSSL on one core;</li>
+<li><strong>primitives</strong> the standard library lacks (<code>ccm</code>, <code>serpent</code>);</li>
+<li><strong>format cores</strong> built on them (<code>zfscrypt</code>).</li>
+</ul>
 <p>Everything here is the <em>crypto</em> layer only. Parsing on-disk structures (the ZFS
-<code>DSL_CRYPTO_KEY</code> bonus area, <code>blkptr_t</code> IV/MAC fields, …) is the job of the
-format driver that calls into these packages — keeping the primitives small,
-auditable, and independent of any particular disk layout.</p>
+<code>DSL_CRYPTO_KEY</code> bonus area, <code>blkptr_t</code> IV/MAC fields, a LUKS or BitLocker
+header…) is the job of the format driver that calls into these packages, such
+as <a href="https://go-fde.github.io/">go-fde</a> or go-filesystems.</p>
 <h2 id="components">Components</h2>
 <table>
 <thead>
@@ -612,9 +671,24 @@ auditable, and independent of any particular disk layout.</p>
 </thead>
 <tbody>
 <tr>
+<td><a href="components/xts/"><code>xts</code></a></td>
+<td><code>github.com/go-encryptions/xts</code></td>
+<td>XTS-AES, a drop-in for <code>golang.org/x/crypto/xts</code> with byte-identical output and a fused amd64/arm64 kernel.</td>
+</tr>
+<tr>
+<td><a href="components/cbc/"><code>cbc</code></a></td>
+<td><code>github.com/go-encryptions/cbc</code></td>
+<td>AES-CBC for disk encryption: an 8-block arm64 decryption kernel, and per-sector IVs (eboiv, essiv).</td>
+</tr>
+<tr>
 <td><a href="components/ccm/"><code>ccm</code></a></td>
 <td><code>github.com/go-encryptions/ccm</code></td>
 <td>AES-CCM (Counter with CBC-MAC) AEAD per RFC 3610 / NIST SP 800-38C. Exposes the standard <code>cipher.AEAD</code> interface; fills the gap left by stdlib's GCM-only <code>crypto/cipher</code>.</td>
+</tr>
+<tr>
+<td><a href="components/serpent/"><code>serpent</code></a></td>
+<td><code>github.com/go-encryptions/serpent</code></td>
+<td>The Serpent block cipher as a <code>cipher.Block</code>, bitsliced, in the byte order VeraCrypt uses.</td>
 </tr>
 <tr>
 <td><a href="components/zfscrypt/"><code>zfscrypt</code></a></td>
@@ -625,10 +699,15 @@ auditable, and independent of any particular disk layout.</p>
 </table>
 <h2 id="design-principles">Design principles</h2>
 <ul>
-<li><strong>Standard library only.</strong> The sole exception is <code>zfscrypt</code> depending on this
-  org's own <code>ccm</code> (because stdlib has no CCM). No <code>x/crypto</code>, no SDKs.</li>
-<li><strong>Standard interfaces.</strong> <code>ccm</code> is a drop-in <code>cipher.AEAD</code>, so it composes with
-  any code that already understands GCM-style <code>Seal</code>/<code>Open</code>.</li>
+<li><strong>Few dependencies.</strong> The <code>ccm</code>, <code>serpent</code>, <code>cbc</code> and <code>zfscrypt</code> packages
+  import the standard library only, apart from <code>zfscrypt</code> importing this
+  org's <code>ccm</code>. <code>xts</code> adds <code>golang.org/x/sys/cpu</code> for feature detection.</li>
+<li><strong>Standard interfaces.</strong> <code>ccm</code> is a drop-in <code>cipher.AEAD</code>, <code>serpent</code> a
+  <code>cipher.Block</code>, and <code>xts</code> has <code>x/crypto/xts</code>'s API.</li>
+<li><strong>Byte-identical to a reference.</strong> Each module is checked against an
+  oracle: <code>crypto/cipher</code>, <code>x/crypto/xts</code>, Botan's Serpent vectors.</li>
+<li><strong>Measured.</strong> The kernels are benchmarked against OpenSSL or Botan on one
+  core, and a gap is filed as an issue.</li>
 <li><strong>Constant-time verification.</strong> Tag comparison uses <code>crypto/subtle</code>; failed
   authentication wipes scratch plaintext and returns an error with <code>dst</code>
   unchanged.</li>

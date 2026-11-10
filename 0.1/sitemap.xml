@@ -9,11 +9,19 @@
          <lastmod>2026-11-10</lastmod>
     </url>
     <url>
+         <loc>https://go-encryptions.github.io/docs/0.1/components/cbc/</loc>
+         <lastmod>2026-11-10</lastmod>
+    </url>
+    <url>
          <loc>https://go-encryptions.github.io/docs/0.1/components/ccm/</loc>
          <lastmod>2026-11-10</lastmod>
     </url>
     <url>
          <loc>https://go-encryptions.github.io/docs/0.1/components/serpent/</loc>
+         <lastmod>2026-11-10</lastmod>
+    </url>
+    <url>
+         <loc>https://go-encryptions.github.io/docs/0.1/components/xts/</loc>
          <lastmod>2026-11-10</lastmod>
     </url>
     <url>
