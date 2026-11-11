@@ -601,6 +601,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="components/kuznyechik/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    kuznyechik — Kuznyechik block cipher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -681,7 +709,7 @@ encryption formats. It has three kinds of module:</p>
 <ul>
 <li><strong>disk-encryption modes</strong> (<code>xts</code>, <code>cbc</code>), with assembly kernels ahead of
   OpenSSL on one core;</li>
-<li><strong>primitives</strong> the standard library lacks (<code>ccm</code>, <code>serpent</code>, <code>camellia</code>);</li>
+<li><strong>primitives</strong> the standard library lacks (<code>ccm</code>, <code>serpent</code>, <code>camellia</code>, <code>kuznyechik</code>);</li>
 <li><strong>format cores</strong> built on them (<code>zfscrypt</code>).</li>
 </ul>
 <p>Everything here is the <em>crypto</em> layer only. Parsing on-disk structures (the ZFS
@@ -722,6 +750,11 @@ as <a href="https://go-fde.github.io/">go-fde</a> or go-filesystems.</p>
 <td><a href="components/camellia/"><code>camellia</code></a></td>
 <td><code>github.com/go-encryptions/camellia</code></td>
 <td>The Camellia block cipher (RFC 3713) as a <code>cipher.Block</code>, pure Go, big-endian as specified.</td>
+</tr>
+<tr>
+<td><a href="components/kuznyechik/"><code>kuznyechik</code></a></td>
+<td><code>github.com/go-encryptions/kuznyechik</code></td>
+<td>The Kuznyechik block cipher (GOST R 34.12-2015, RFC 7801) as a <code>cipher.Block</code>, pure Go, in the byte order of the RFC and VeraCrypt.</td>
 </tr>
 <tr>
 <td><a href="components/zfscrypt/"><code>zfscrypt</code></a></td>
