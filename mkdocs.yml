@@ -44,3 +44,4 @@ nav:
       - "ccm — AES-CCM AEAD": components/ccm.md
       - "zfscrypt — OpenZFS encryption core": components/zfscrypt.md
       - "serpent — Serpent block cipher": components/serpent.md
+      - "camellia — Camellia block cipher": components/camellia.md

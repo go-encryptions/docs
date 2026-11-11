@@ -8,7 +8,7 @@ encryption formats. It has three kinds of module:
 
 - **disk-encryption modes** (`xts`, `cbc`), with assembly kernels ahead of
   OpenSSL on one core;
-- **primitives** the standard library lacks (`ccm`, `serpent`);
+- **primitives** the standard library lacks (`ccm`, `serpent`, `camellia`);
 - **format cores** built on them (`zfscrypt`).
 
 Everything here is the *crypto* layer only. Parsing on-disk structures (the ZFS
@@ -24,6 +24,7 @@ as [go-fde](https://go-fde.github.io/) or go-filesystems.
 | [`cbc`](components/cbc.md) | `github.com/go-encryptions/cbc` | AES-CBC for disk encryption: an 8-block arm64 decryption kernel, and per-sector IVs (eboiv, essiv). |
 | [`ccm`](components/ccm.md) | `github.com/go-encryptions/ccm` | AES-CCM (Counter with CBC-MAC) AEAD per RFC 3610 / NIST SP 800-38C. Exposes the standard `cipher.AEAD` interface; fills the gap left by stdlib's GCM-only `crypto/cipher`. |
 | [`serpent`](components/serpent.md) | `github.com/go-encryptions/serpent` | The Serpent block cipher as a `cipher.Block`, bitsliced, in the byte order VeraCrypt uses. |
+| [`camellia`](components/camellia.md) | `github.com/go-encryptions/camellia` | The Camellia block cipher (RFC 3713) as a `cipher.Block`, pure Go, big-endian as specified. |
 | [`zfscrypt`](components/zfscrypt.md) | `github.com/go-encryptions/zfscrypt` | The cryptographic core of OpenZFS native dataset encryption — PBKDF2 wrapping-key derivation, MEK unwrap, HKDF-SHA512 per-block keys, and AES-CCM/GCM block decryption (read path). Depends on `ccm`. |
 
 ## Design principles
