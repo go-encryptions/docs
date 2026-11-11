@@ -12,6 +12,7 @@ arm64, with a portable path everywhere else.
 | [`zfscrypt`](zfscrypt.md) | `github.com/go-encryptions/zfscrypt` | format core | OpenZFS native-encryption primitives: KDF, MEK unwrap, per-block key derivation, AES-CCM/GCM block decrypt. Read path only. Depends on `ccm`. |
 | [`serpent`](serpent.md) | `github.com/go-encryptions/serpent` | primitive | The Serpent block cipher (16/24/32-byte keys) as a `cipher.Block`, in the standard byte order of Botan, VeraCrypt and Linux `serpent`. Pure Go, bitsliced. |
 | [`camellia`](camellia.md) | `github.com/go-encryptions/camellia` | primitive | The Camellia block cipher (RFC 3713, 16/24/32-byte keys) as a `cipher.Block`. Pure Go, big-endian as specified. |
+| [`kuznyechik`](kuznyechik.md) | `github.com/go-encryptions/kuznyechik` | primitive | The Kuznyechik block cipher (GOST R 34.12-2015 / RFC 7801, 32-byte keys) as a `cipher.Block`, in the byte order of the RFC and VeraCrypt. Pure Go, table-driven. |
 
 ## Dependency graph
 

@@ -45,3 +45,4 @@ nav:
       - "zfscrypt — OpenZFS encryption core": components/zfscrypt.md
       - "serpent — Serpent block cipher": components/serpent.md
       - "camellia — Camellia block cipher": components/camellia.md
+      - "kuznyechik — Kuznyechik block cipher": components/kuznyechik.md
