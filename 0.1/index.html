@@ -636,6 +636,34 @@
   
   
     <li class="md-nav__item">
+      <a href="components/twofish/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    twofish — Twofish block cipher
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="components/whirlpool/" class="md-nav__link">
         
   
@@ -765,7 +793,7 @@ encryption formats. It has three kinds of module:</p>
 <ul>
 <li><strong>disk-encryption modes</strong> (<code>xts</code>, <code>cbc</code>), with assembly kernels ahead of
   OpenSSL on one core;</li>
-<li><strong>primitives</strong> the standard library lacks (<code>ccm</code>, <code>serpent</code>, <code>camellia</code>, <code>kuznyechik</code>, <code>whirlpool</code>, <code>streebog</code>);</li>
+<li><strong>primitives</strong> the standard library lacks (<code>ccm</code>, <code>serpent</code>, <code>camellia</code>, <code>kuznyechik</code>, <code>twofish</code>, <code>whirlpool</code>, <code>streebog</code>);</li>
 <li><strong>format cores</strong> built on them (<code>zfscrypt</code>).</li>
 </ul>
 <p>Everything here is the <em>crypto</em> layer only. Parsing on-disk structures (the ZFS
@@ -811,6 +839,11 @@ as <a href="https://go-fde.github.io/">go-fde</a> or go-filesystems.</p>
 <td><a href="components/kuznyechik/"><code>kuznyechik</code></a></td>
 <td><code>github.com/go-encryptions/kuznyechik</code></td>
 <td>The Kuznyechik block cipher (GOST R 34.12-2015, RFC 7801) as a <code>cipher.Block</code>, pure Go, in the byte order of the RFC and VeraCrypt.</td>
+</tr>
+<tr>
+<td><a href="components/twofish/"><code>twofish</code></a></td>
+<td><code>github.com/go-encryptions/twofish</code></td>
+<td>The Twofish block cipher (16/24/32-byte keys) as a <code>cipher.Block</code>, pure Go, with a batched path faster than Botan.</td>
 </tr>
 <tr>
 <td><a href="components/whirlpool/"><code>whirlpool</code></a></td>
