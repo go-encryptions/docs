@@ -629,6 +629,62 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="components/whirlpool/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    whirlpool — Whirlpool-512 hash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="components/streebog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    streebog — Streebog hash
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -709,7 +765,7 @@ encryption formats. It has three kinds of module:</p>
 <ul>
 <li><strong>disk-encryption modes</strong> (<code>xts</code>, <code>cbc</code>), with assembly kernels ahead of
   OpenSSL on one core;</li>
-<li><strong>primitives</strong> the standard library lacks (<code>ccm</code>, <code>serpent</code>, <code>camellia</code>, <code>kuznyechik</code>);</li>
+<li><strong>primitives</strong> the standard library lacks (<code>ccm</code>, <code>serpent</code>, <code>camellia</code>, <code>kuznyechik</code>, <code>whirlpool</code>, <code>streebog</code>);</li>
 <li><strong>format cores</strong> built on them (<code>zfscrypt</code>).</li>
 </ul>
 <p>Everything here is the <em>crypto</em> layer only. Parsing on-disk structures (the ZFS
@@ -755,6 +811,16 @@ as <a href="https://go-fde.github.io/">go-fde</a> or go-filesystems.</p>
 <td><a href="components/kuznyechik/"><code>kuznyechik</code></a></td>
 <td><code>github.com/go-encryptions/kuznyechik</code></td>
 <td>The Kuznyechik block cipher (GOST R 34.12-2015, RFC 7801) as a <code>cipher.Block</code>, pure Go, in the byte order of the RFC and VeraCrypt.</td>
+</tr>
+<tr>
+<td><a href="components/whirlpool/"><code>whirlpool</code></a></td>
+<td><code>github.com/go-encryptions/whirlpool</code></td>
+<td>The Whirlpool-512 hash (ISO/IEC 10118-3) as a <code>hash.Hash</code>, pure Go, for PBKDF2-HMAC.</td>
+</tr>
+<tr>
+<td><a href="components/streebog/"><code>streebog</code></a></td>
+<td><code>github.com/go-encryptions/streebog</code></td>
+<td>The Streebog hash (GOST R 34.11-2012, RFC 6986), 256 and 512 bits, as a <code>hash.Hash</code>, pure Go, for PBKDF2-HMAC.</td>
 </tr>
 <tr>
 <td><a href="components/zfscrypt/"><code>zfscrypt</code></a></td>
