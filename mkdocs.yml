@@ -46,3 +46,5 @@ nav:
       - "serpent — Serpent block cipher": components/serpent.md
       - "camellia — Camellia block cipher": components/camellia.md
       - "kuznyechik — Kuznyechik block cipher": components/kuznyechik.md
+      - "whirlpool — Whirlpool-512 hash": components/whirlpool.md
+      - "streebog — Streebog hash": components/streebog.md
