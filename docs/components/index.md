@@ -13,6 +13,7 @@ arm64, with a portable path everywhere else.
 | [`serpent`](serpent.md) | `github.com/go-encryptions/serpent` | primitive | The Serpent block cipher (16/24/32-byte keys) as a `cipher.Block`, in the standard byte order of Botan, VeraCrypt and Linux `serpent`. Pure Go, bitsliced. |
 | [`camellia`](camellia.md) | `github.com/go-encryptions/camellia` | primitive | The Camellia block cipher (RFC 3713, 16/24/32-byte keys) as a `cipher.Block`. Pure Go, big-endian as specified. |
 | [`kuznyechik`](kuznyechik.md) | `github.com/go-encryptions/kuznyechik` | primitive | The Kuznyechik block cipher (GOST R 34.12-2015 / RFC 7801, 32-byte keys) as a `cipher.Block`, in the byte order of the RFC and VeraCrypt. Pure Go, table-driven. |
+| [`twofish`](twofish.md) | `github.com/go-encryptions/twofish` | primitive | The Twofish block cipher (16/24/32-byte keys) as a `cipher.Block`, with optional `EncryptBlocks`/`DecryptBlocks`. Pure Go, table-driven. |
 | [`whirlpool`](whirlpool.md) | `github.com/go-encryptions/whirlpool` | primitive | The Whirlpool-512 hash (ISO/IEC 10118-3) as a `hash.Hash` that marshals its state. Pure Go, table-driven. |
 | [`streebog`](streebog.md) | `github.com/go-encryptions/streebog` | primitive | The Streebog hash (GOST R 34.11-2012 / RFC 6986), 256 and 512 bits, as a `hash.Hash` that marshals its state. Pure Go, table-driven. |
 
