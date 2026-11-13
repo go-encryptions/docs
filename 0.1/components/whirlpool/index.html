@@ -691,6 +691,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -794,6 +805,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Performance
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -819,8 +841,10 @@
 10118-3, 512-bit digest) as a standard
 <a href="https://pkg.go.dev/hash#Hash"><code>hash.Hash</code></a>. It is the final 2003 version of
 Barreto and Rijmen, with the revised S-box and the diffusion matrix
-<code>cir(1, 1, 4, 1, 8, 5, 2, 9)</code>. It is pure Go, with no cgo and no dependency
-beyond the standard library.</p>
+<code>cir(1, 1, 4, 1, 8, 5, 2, 9)</code>. It is Go with no cgo and no dependency beyond
+the standard library; on arm64 the compression function is an assembly kernel
+(generated with go-asmgen) that keeps the whole round in registers, and every
+other architecture runs the portable Go form.</p>
 <p>Its first consumer is VeraCrypt-volume support in <code>go-fde/veracrypt</code>, which
 needs Whirlpool-512 as one of the PRFs of PBKDF2-HMAC when it derives header
 keys.</p>
@@ -851,8 +875,36 @@ refuses a state of the wrong length, a foreign magic or an inconsistent buffer.<
 <li>100 % statement coverage, with the race detector, on amd64 and arm64, and
   under QEMU on big-endian s390x and on riscv64.</li>
 </ul>
-<p>See the <a href="https://github.com/go-encryptions/whirlpool#readme">README</a> for the
-benchmark against Botan.</p>
+<h2 id="performance">Performance</h2>
+<p>Against Botan 3.14.1 on one core of an Apple M4 Max (arm64), interleaved with
+<code>abbench --max-load 8</code>, since v0.3.0:</p>
+<table>
+<thead>
+<tr>
+<th>per call</th>
+<th>this package</th>
+<th>Botan 3.14.1</th>
+<th>ratio</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 KiB</td>
+<td>2.355 µs ± 1 %</td>
+<td>2.507 µs ± 5 %</td>
+<td>1.06x faster</td>
+</tr>
+<tr>
+<td>64 KiB</td>
+<td>140.1 µs ± 1 %</td>
+<td>149.6 µs ± 24 %</td>
+<td>1.07x faster</td>
+</tr>
+</tbody>
+</table>
+<p>amd64 and the other targets run the portable Go form, which has not been
+compared with Botan there. See the
+<a href="https://github.com/go-encryptions/whirlpool#readme">README</a> for the method.</p>
 
 
 
