@@ -27,7 +27,7 @@ as [go-fde](https://go-fde.github.io/) or go-filesystems.
 | [`camellia`](components/camellia.md) | `github.com/go-encryptions/camellia` | The Camellia block cipher (RFC 3713) as a `cipher.Block`, pure Go, big-endian as specified. |
 | [`kuznyechik`](components/kuznyechik.md) | `github.com/go-encryptions/kuznyechik` | The Kuznyechik block cipher (GOST R 34.12-2015, RFC 7801) as a `cipher.Block`, pure Go, in the byte order of the RFC and VeraCrypt. |
 | [`twofish`](components/twofish.md) | `github.com/go-encryptions/twofish` | The Twofish block cipher (16/24/32-byte keys) as a `cipher.Block`, pure Go, with a batched path faster than Botan. |
-| [`whirlpool`](components/whirlpool.md) | `github.com/go-encryptions/whirlpool` | The Whirlpool-512 hash (ISO/IEC 10118-3) as a `hash.Hash`, pure Go, for PBKDF2-HMAC. |
+| [`whirlpool`](components/whirlpool.md) | `github.com/go-encryptions/whirlpool` | The Whirlpool-512 hash (ISO/IEC 10118-3) as a `hash.Hash`, Go with arm64 and AVX-512 kernels, for PBKDF2-HMAC. |
 | [`streebog`](components/streebog.md) | `github.com/go-encryptions/streebog` | The Streebog hash (GOST R 34.11-2012, RFC 6986), 256 and 512 bits, as a `hash.Hash`, pure Go, for PBKDF2-HMAC. |
 | [`zfscrypt`](components/zfscrypt.md) | `github.com/go-encryptions/zfscrypt` | The cryptographic core of OpenZFS native dataset encryption — PBKDF2 wrapping-key derivation, MEK unwrap, HKDF-SHA512 per-block keys, and AES-CCM/GCM block decryption (read path). Depends on `ccm`. |
 
