@@ -842,9 +842,11 @@
 <a href="https://pkg.go.dev/hash#Hash"><code>hash.Hash</code></a>. It is the final 2003 version of
 Barreto and Rijmen, with the revised S-box and the diffusion matrix
 <code>cir(1, 1, 4, 1, 8, 5, 2, 9)</code>. It is Go with no cgo and no dependency beyond
-the standard library; on arm64 the compression function is an assembly kernel
-(generated with go-asmgen) that keeps the whole round in registers, and every
-other architecture runs the portable Go form.</p>
+the standard library; on arm64 and amd64 the compression function is an
+assembly kernel (generated with go-asmgen) that keeps the round in registers.
+On amd64 a vector kernel (AVX-512 BW, VBMI and GFNI, chosen at run time) holds
+the 8x8 state in one ZMM register, and a scalar kernel serves every other x86-64
+processor. Other architectures run the portable Go form.</p>
 <p>Its first consumer is VeraCrypt-volume support in <code>go-fde/veracrypt</code>, which
 needs Whirlpool-512 as one of the PRFs of PBKDF2-HMAC when it derives header
 keys.</p>
@@ -876,7 +878,7 @@ refuses a state of the wrong length, a foreign magic or an inconsistent buffer.<
   under QEMU on big-endian s390x and on riscv64.</li>
 </ul>
 <h2 id="performance">Performance</h2>
-<p>Against Botan 3.14.1 on one core of an Apple M4 Max (arm64), interleaved with
+<p>On arm64, against Botan 3.14.1 on one core of an Apple M4 Max, interleaved with
 <code>abbench --max-load 8</code>, since v0.3.0:</p>
 <table>
 <thead>
@@ -902,8 +904,43 @@ refuses a state of the wrong length, a foreign magic or an inconsistent buffer.<
 </tr>
 </tbody>
 </table>
-<p>amd64 and the other targets run the portable Go form, which has not been
-compared with Botan there. See the
+<p>On one core of an AMD Ryzen 9 7950X (Zen 4, amd64), against Botan 3.14.1's own
+AVX-512 kernel, nine interleaved rounds at load 0.00, medians, since v0.4.0:</p>
+<table>
+<thead>
+<tr>
+<th>throughput (MiB/s)</th>
+<th>portable Go</th>
+<th>scalar kernel</th>
+<th>AVX-512 kernel</th>
+<th>Botan 3.14.1</th>
+<th>AVX-512 kernel vs Botan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1 KiB</td>
+<td>259.4</td>
+<td>318.4</td>
+<td>518.3</td>
+<td>409.6</td>
+<td>1.27x faster</td>
+</tr>
+<tr>
+<td>64 KiB</td>
+<td>276.2</td>
+<td>339.4</td>
+<td>561.5</td>
+<td>440.7</td>
+<td>1.27x faster</td>
+</tr>
+</tbody>
+</table>
+<p>The vector kernel follows Botan's algorithm and multiplies by the constants of
+the diffusion matrix with <code>VGF2P8AFFINEQB</code> (a constant multiplication is an 8x8
+bit matrix over GF(2)) instead of chained doublings. Processors without AVX-512
+BW, VBMI and GFNI run the scalar kernel. The other targets run the portable Go
+form, which has not been compared with Botan there. See the
 <a href="https://github.com/go-encryptions/whirlpool#readme">README</a> for the method.</p>
 
 
