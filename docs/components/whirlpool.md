@@ -11,9 +11,11 @@ Package `whirlpool` implements the **Whirlpool** hash function (ISO/IEC
 [`hash.Hash`](https://pkg.go.dev/hash#Hash). It is the final 2003 version of
 Barreto and Rijmen, with the revised S-box and the diffusion matrix
 `cir(1, 1, 4, 1, 8, 5, 2, 9)`. It is Go with no cgo and no dependency beyond
-the standard library; on arm64 the compression function is an assembly kernel
-(generated with go-asmgen) that keeps the whole round in registers, and every
-other architecture runs the portable Go form.
+the standard library; on arm64 and amd64 the compression function is an
+assembly kernel (generated with go-asmgen) that keeps the round in registers.
+On amd64 a vector kernel (AVX-512 BW, VBMI and GFNI, chosen at run time) holds
+the 8x8 state in one ZMM register, and a scalar kernel serves every other x86-64
+processor. Other architectures run the portable Go form.
 
 Its first consumer is VeraCrypt-volume support in `go-fde/veracrypt`, which
 needs Whirlpool-512 as one of the PRFs of PBKDF2-HMAC when it derives header
@@ -56,7 +58,7 @@ dk, err := pbkdf2.Key(whirlpool.New, password, salt, 500000, 64)
 
 ## Performance
 
-Against Botan 3.14.1 on one core of an Apple M4 Max (arm64), interleaved with
+On arm64, against Botan 3.14.1 on one core of an Apple M4 Max, interleaved with
 `abbench --max-load 8`, since v0.3.0:
 
 | per call | this package | Botan 3.14.1 | ratio |
@@ -64,6 +66,17 @@ Against Botan 3.14.1 on one core of an Apple M4 Max (arm64), interleaved with
 | 1 KiB | 2.355 µs ± 1 % | 2.507 µs ± 5 % | 1.06x faster |
 | 64 KiB | 140.1 µs ± 1 % | 149.6 µs ± 24 % | 1.07x faster |
 
-amd64 and the other targets run the portable Go form, which has not been
-compared with Botan there. See the
+On one core of an AMD Ryzen 9 7950X (Zen 4, amd64), against Botan 3.14.1's own
+AVX-512 kernel, nine interleaved rounds at load 0.00, medians, since v0.4.0:
+
+| throughput (MiB/s) | portable Go | scalar kernel | AVX-512 kernel | Botan 3.14.1 | AVX-512 kernel vs Botan |
+|---|---|---|---|---|---|
+| 1 KiB | 259.4 | 318.4 | 518.3 | 409.6 | 1.27x faster |
+| 64 KiB | 276.2 | 339.4 | 561.5 | 440.7 | 1.27x faster |
+
+The vector kernel follows Botan's algorithm and multiplies by the constants of
+the diffusion matrix with `VGF2P8AFFINEQB` (a constant multiplication is an 8x8
+bit matrix over GF(2)) instead of chained doublings. Processors without AVX-512
+BW, VBMI and GFNI run the scalar kernel. The other targets run the portable Go
+form, which has not been compared with Botan there. See the
 [README](https://github.com/go-encryptions/whirlpool#readme) for the method.
