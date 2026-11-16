@@ -60,7 +60,11 @@ block.Encrypt(ct[:16], pt[:16])
 
 ## Performance
 
-On an Apple M4 Max, one core, 1 KiB: the batched path is 1.32x faster than
-Botan 3.14.1; the one-block path is 2.2x faster than `x/crypto/twofish` but
-slower than Botan (a single block is a chain of dependent rounds). See the
+On an Apple M4 Max, one core, 1 KiB: the batched path is 1.43x faster than
+Botan 3.14.1 (`botan speed`); the one-block path is 2.3x faster than
+`x/crypto/twofish` and 1.02x to 1.04x slower than Botan called one block at a
+time (a single block is a chain of dependent rounds; `botan speed` runs two
+blocks side by side, which `cipher.Block` cannot express). On amd64 (Ryzen 9
+7950X) one block at a time is about 5x faster than Botan called one block at a
+time. See the
 [README](https://github.com/go-encryptions/twofish#readme) for the table.
