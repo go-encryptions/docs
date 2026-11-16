@@ -879,9 +879,13 @@ The bytes are those of <code>Encrypt</code> on each block.</p>
   under QEMU on big-endian s390x and on riscv64.</li>
 </ul>
 <h2 id="performance">Performance</h2>
-<p>On an Apple M4 Max, one core, 1 KiB: the batched path is 1.32x faster than
-Botan 3.14.1; the one-block path is 2.2x faster than <code>x/crypto/twofish</code> but
-slower than Botan (a single block is a chain of dependent rounds). See the
+<p>On an Apple M4 Max, one core, 1 KiB: the batched path is 1.43x faster than
+Botan 3.14.1 (<code>botan speed</code>); the one-block path is 2.3x faster than
+<code>x/crypto/twofish</code> and 1.02x to 1.04x slower than Botan called one block at a
+time (a single block is a chain of dependent rounds; <code>botan speed</code> runs two
+blocks side by side, which <code>cipher.Block</code> cannot express). On amd64 (Ryzen 9
+7950X) one block at a time is about 5x faster than Botan called one block at a
+time. See the
 <a href="https://github.com/go-encryptions/twofish#readme">README</a> for the table.</p>
 
 
