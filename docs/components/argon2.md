@@ -1,6 +1,6 @@
 # argon2 — Argon2 with a NEON kernel
 
-`github.com/go-encryptions/argon2` (v0.1.0)
+`github.com/go-encryptions/argon2` (v0.1.1)
 
 ```go
 import "github.com/go-encryptions/argon2"
@@ -30,9 +30,22 @@ against the portable code on random blocks (including `out` aliasing an input),
 and a test of `Key` and `IDKey` against `golang.org/x/crypto/argon2` over several
 parameter sets.
 
-**Measured, and where.** Apple M4 Max only, one core, Argon2id t=3, m=64 MiB,
-p=1: this package 41.6 ms, `golang.org/x/crypto/argon2` 93.6 ms. On amd64 the code
-is unchanged from x/crypto, so no speed-up is claimed there.
+**Measured, and where.** From the README at tag v0.1.1. Argon2id, t=3, m=64 MiB,
+one lane, 32-byte output, one core, Go 1.27.4. The reference is libsodium 1.0.22
+`crypto_pwhash`, compared by [refbench](https://github.com/go-scikit/refbench)
+with the harness of go-theca/theca (theca v0.7.0, argon2 v0.1.0): interleaved
+rounds, every round under a 1-minute load of 8, output compared byte for byte.
+
+| Machine | This package | libsodium 1.0.22 | Ratio | `x/crypto/argon2` |
+|---|---:|---:|---:|---:|
+| Apple M4 Max | 48.9 ms | 66.5 ms | 0.73 | 93.6 ms |
+| AMD Ryzen 9 7950X (Zen 4), pinned to one core | 66.4 ms | 262 ms | 0.25 | 66.4 ms (same code) |
+
+On arm64 the NEON kernel is 1.9 times faster than x/crypto and 1.36 times faster
+than libsodium. On amd64 this package is x/crypto's SSE4.1 code unchanged, so no
+speed-up over x/crypto is claimed there. libsodium's 262 ms on Zen 4 is
+libsodium's own: a C program calling `crypto_pwhash` on the same core takes 265 ms
+with two different builds of 1.0.22, both reporting AVX2 and AVX-512F.
 
 Used by [theca](https://go-theca.github.io/docs/) v0.7.0 (0.73 of libsodium on
 the M4 Max).
