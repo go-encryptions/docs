@@ -489,6 +489,62 @@
   
   
     <li class="md-nav__item">
+      <a href="ctr/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    ctr — AES-CTR
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="argon2/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    argon2 — Argon2
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="ccm/" class="md-nav__link">
         
   
@@ -792,6 +848,18 @@ arm64, with a portable path everywhere else.</p>
 <td><code>github.com/go-encryptions/cbc</code></td>
 <td>mode</td>
 <td>AES-CBC for disk encryption: an 8-block arm64 decryption kernel, plus per-sector IVs (eboiv, essiv) 8 at a time. Byte-identical to <code>crypto/cipher</code>; ahead of OpenSSL on one core.</td>
+</tr>
+<tr>
+<td><a href="ctr/"><code>ctr</code></a></td>
+<td><code>github.com/go-encryptions/ctr</code></td>
+<td>mode</td>
+<td>AES-CTR for a stream of messages under one key: the key expanded once, eight blocks in flight, no allocation, <code>Zeroize</code>. Byte-identical to <code>crypto/cipher</code>; 306 ns against 444 ns per 4 KiB on an Apple M4 Max (not measured elsewhere yet).</td>
+</tr>
+<tr>
+<td><a href="argon2/"><code>argon2</code></a></td>
+<td><code>github.com/go-encryptions/argon2</code></td>
+<td>primitive</td>
+<td>Argon2 (RFC 9106), the API and code of <code>x/crypto/argon2</code> plus a NEON BLAMKA kernel on arm64: 41.6 ms against 93.6 ms (t=3, m=64 MiB) on an Apple M4 Max. Unchanged on amd64.</td>
 </tr>
 <tr>
 <td><a href="ccm/"><code>ccm</code></a></td>
