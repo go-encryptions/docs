@@ -757,7 +757,7 @@
 
 
 <h1 id="ctr-aes-ctr">ctr — AES-CTR</h1>
-<p><code>github.com/go-encryptions/ctr</code> (v0.1.1)</p>
+<p><code>github.com/go-encryptions/ctr</code> (v0.1.2)</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="s">"github.com/go-encryptions/ctr"</span>
 </code></pre></div>
 <p>AES in counter mode for a stream of messages under one key, written from the
@@ -803,9 +803,42 @@ concurrent use.</p>
 <p><strong>Correctness.</strong> NIST SP 800-38A known-answer vectors, differential tests against
 <code>crypto/cipher</code> for every length from 0 to 530 bytes, all three key sizes, a fuzz
 target, and 100% statement coverage on every architecture CI runs.</p>
-<p><strong>Measured, and where.</strong> Apple M4 Max only, one core, 4 KiB message: <code>ctr</code> 306 ns,
-<code>crypto/cipher.NewCTR</code> (key schedule reused) 444 ns. The README gives no amd64
-(Zen 4) figure yet; none is stated here.</p>
+<p><strong>Measured, and where.</strong> From the README at tag v0.1.2. AES-256-CTR over one 4 KiB
+message (a sector), one core, key schedule reused, Go 1.27.4. The reference is
+OpenSSL's <code>EVP aes-256-ctr</code> called the same way, measured by
+<a href="https://github.com/go-scikit/refbench">refbench</a> with the harness of
+go-theca/theca (theca v0.7.0, ctr v0.1.1): interleaved rounds, every round under a
+1-minute load of 8, output compared byte for byte.</p>
+<table>
+<thead>
+<tr>
+<th>Machine</th>
+<th style="text-align: right;"><code>ctr</code></th>
+<th style="text-align: right;">OpenSSL 4.0.2</th>
+<th style="text-align: right;">Ratio</th>
+<th style="text-align: right;"><code>crypto/cipher</code> (Go)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apple M4 Max</td>
+<td style="text-align: right;">320 ns</td>
+<td style="text-align: right;">310 ns</td>
+<td style="text-align: right;">1.03</td>
+<td style="text-align: right;">444 ns</td>
+</tr>
+<tr>
+<td>AMD Ryzen 9 7950X (Zen 4), pinned to one core</td>
+<td style="text-align: right;">347 ns</td>
+<td style="text-align: right;">359 ns</td>
+<td style="text-align: right;">0.97</td>
+<td style="text-align: right;">424 ns</td>
+</tr>
+</tbody>
+</table>
+<p>So <code>ctr</code> is within 3 percent of OpenSSL on arm64 and ahead of it on Zen 4. The
+<code>crypto/cipher</code> column is <code>go test -bench . -cpu 1</code> in the repository
+(<code>BenchmarkSectorStdlib</code>, a new CTR state per message).</p>
 <p>Used by <a href="https://go-theca.github.io/docs/">theca</a> v0.7.0 for sector encryption.</p>
 
 

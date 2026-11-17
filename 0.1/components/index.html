@@ -853,13 +853,13 @@ arm64, with a portable path everywhere else.</p>
 <td><a href="ctr/"><code>ctr</code></a></td>
 <td><code>github.com/go-encryptions/ctr</code></td>
 <td>mode</td>
-<td>AES-CTR for a stream of messages under one key: the key expanded once, eight blocks in flight, no allocation, <code>Zeroize</code>. Byte-identical to <code>crypto/cipher</code>; 306 ns against 444 ns per 4 KiB on an Apple M4 Max (not measured elsewhere yet).</td>
+<td>AES-CTR for a stream of messages under one key: the key expanded once, eight blocks in flight, no allocation, <code>Zeroize</code>. Byte-identical to <code>crypto/cipher</code>; 1.03 of OpenSSL on an Apple M4 Max and 0.97 on a Zen 4 core, per 4 KiB sector (v0.1.2).</td>
 </tr>
 <tr>
 <td><a href="argon2/"><code>argon2</code></a></td>
 <td><code>github.com/go-encryptions/argon2</code></td>
 <td>primitive</td>
-<td>Argon2 (RFC 9106), the API and code of <code>x/crypto/argon2</code> plus a NEON BLAMKA kernel on arm64: 41.6 ms against 93.6 ms (t=3, m=64 MiB) on an Apple M4 Max. Unchanged on amd64.</td>
+<td>Argon2 (RFC 9106), the API and code of <code>x/crypto/argon2</code> plus a NEON BLAMKA kernel on arm64: 0.73 of libsodium on an Apple M4 Max (48.9 against 66.5 ms, t=3, m=64 MiB); unchanged on amd64, where it measures 0.25 of libsodium on Zen 4 (v0.1.1).</td>
 </tr>
 <tr>
 <td><a href="ccm/"><code>ccm</code></a></td>
