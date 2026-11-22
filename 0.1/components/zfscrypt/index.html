@@ -1156,8 +1156,16 @@ do not "upgrade" it without a corresponding format change.</p>
 <h2 id="api">API</h2>
 <div class="highlight"><pre><span></span><code><span class="c1">// DeriveWrappingKey derives the 32-byte wrapping key from the user</span>
 <span class="c1">// passphrase via PBKDF2-HMAC-SHA1. iters and salt come from the</span>
-<span class="c1">// DSL_CRYPTO_KEY object.</span>
+<span class="c1">// DSL_CRYPTO_KEY object. iters is untrusted: the work is charged to a</span>
+<span class="c1">// kdfbudget.Default budget first, so a count above 2^31 (OpenZFS has a</span>
+<span class="c1">// minimum of 100000 but no maximum) is refused with ErrLimit before any</span>
+<span class="c1">// hashing.</span>
 <span class="kd">func</span><span class="w"> </span><span class="nx">DeriveWrappingKey</span><span class="p">(</span><span class="nx">passphrase</span><span class="p">,</span><span class="w"> </span><span class="nx">salt</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">,</span><span class="w"> </span><span class="nx">iters</span><span class="w"> </span><span class="kt">int</span><span class="p">)</span><span class="w"> </span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
+
+<span class="c1">// DeriveWrappingKeyBudget is DeriveWrappingKey with the caller's</span>
+<span class="c1">// *kdfbudget.Budget (kdfbudget.Unlimited() for a trusted header; a nil</span>
+<span class="c1">// budget refuses). Added in v0.2.0.</span>
+<span class="kd">func</span><span class="w"> </span><span class="nx">DeriveWrappingKeyBudget</span><span class="p">(</span><span class="nx">passphrase</span><span class="p">,</span><span class="w"> </span><span class="nx">salt</span><span class="w"> </span><span class="p">[]</span><span class="kt">byte</span><span class="p">,</span><span class="w"> </span><span class="nx">iters</span><span class="w"> </span><span class="kt">int</span><span class="p">,</span><span class="w"> </span><span class="nx">b</span><span class="w"> </span><span class="o">*</span><span class="nx">kdfbudget</span><span class="p">.</span><span class="nx">Budget</span><span class="p">)</span><span class="w"> </span><span class="p">([]</span><span class="kt">byte</span><span class="p">,</span><span class="w"> </span><span class="kt">error</span><span class="p">)</span>
 
 <span class="c1">// Unwrap decrypts the wrapped (MEK || HMAC-key) blob with the</span>
 <span class="c1">// wrapping key, returning the 32-byte MEK and 32-byte HMAC key.</span>
@@ -1200,7 +1208,8 @@ for CCM suites or <code>cipher.NewGCMWithNonceSize(block, 12)</code> for GCM —
 <h2 id="dependencies">Dependencies</h2>
 <p>Standard library (<code>crypto/aes</code>, <code>crypto/cipher</code>, <code>crypto/hkdf</code>, <code>crypto/hmac</code>,
 <code>crypto/pbkdf2</code>, <code>crypto/sha1</code>, <code>crypto/sha512</code>) plus this org's own
-<a href="../ccm/"><code>ccm</code></a> for the CCM suites. No <code>golang.org/x/crypto</code>.</p>
+<a href="../ccm/"><code>ccm</code></a> for the CCM suites and <a href="../kdfbudget/"><code>kdfbudget</code></a> to bound the
+PBKDF2 work. No <code>golang.org/x/crypto</code>.</p>
 <p>Requires <strong>Go 1.25</strong> or newer.</p>
 
 

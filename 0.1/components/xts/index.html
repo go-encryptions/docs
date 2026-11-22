@@ -977,6 +977,14 @@ blocks and folds the tweak XOR into the rounds.</p>
 <span class="nx">c</span><span class="p">.</span><span class="nx">EncryptSectors</span><span class="p">(</span><span class="nx">ciphertext</span><span class="p">,</span><span class="w"> </span><span class="nx">plaintext</span><span class="p">,</span><span class="w"> </span><span class="mi">512</span><span class="p">,</span><span class="w"> </span><span class="nx">firstSector</span><span class="p">)</span>
 </code></pre></div>
 <ul>
+<li><code>NewCipher</code> refuses a key whose two halves are equal (<code>xts.ErrEqualKeys</code>), as
+  IEEE 1619-2018 section 5.1 and FIPS 140-3 IG C.I require; <code>x/crypto/xts</code>
+  accepts it. <code>NewCipherAllowEqualKeys</code> is the same constructor without that
+  check, for reading data written under such a key (v0.4.0).</li>
+<li>The AES assembly path is taken only after the constructor has been probed with
+  the zero key and both real key halves, so a wrapper that changes the key before
+  calling <code>aes.NewCipher</code> falls back to the portable path. On amd64 it also
+  needs SSE4.1 as well as AES-NI.</li>
 <li>Buffers must be a whole number of 16-byte blocks, at least one block long:
   the <code>x/crypto/xts</code> contract.</li>
 <li><code>DecryptSectors</code> and <code>EncryptSectors</code> give exactly what <code>Decrypt</code> and

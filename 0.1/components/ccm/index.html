@@ -1051,7 +1051,9 @@ is 3 bytes — sufficient for any ZFS block, which is at most 2²⁴ bytes).</p>
 <li><code>Overhead() int</code> — bytes <code>Seal</code> appends after the ciphertext (the tag).</li>
 <li><code>Seal(dst, nonce, plaintext, additionalData []byte) []byte</code> — encrypts and
   authenticates <code>plaintext</code>, authenticates <code>additionalData</code>, appends the result
-  to <code>dst</code>. The nonce must be <code>NonceSize()</code> bytes and unique per key.</li>
+  to <code>dst</code>. The nonce must be <code>NonceSize()</code> bytes and unique per key. It panics
+  when <code>dst</code> and <code>plaintext</code> overlap inexactly, as <code>crypto/cipher</code> does;
+  <code>Seal(buf[:0], nonce, buf, ad)</code> (exact overlap, in place) is allowed (v0.1.2).</li>
 <li><code>Open(dst, nonce, ciphertext, additionalData []byte) ([]byte, error)</code> —
   verifies and decrypts. On a tag mismatch it returns an error and leaves <code>dst</code>
   unchanged.</li>

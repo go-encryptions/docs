@@ -841,7 +841,7 @@
 
 
 <h1 id="argon2-argon2-with-a-neon-kernel">argon2 — Argon2 with a NEON kernel</h1>
-<p><code>github.com/go-encryptions/argon2</code> (v0.1.1)</p>
+<p><code>github.com/go-encryptions/argon2</code> (v0.1.2)</p>
 <div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="s">"github.com/go-encryptions/argon2"</span>
 
 <span class="nx">key</span><span class="w"> </span><span class="o">:=</span><span class="w"> </span><span class="nx">argon2</span><span class="p">.</span><span class="nx">IDKey</span><span class="p">(</span><span class="nx">password</span><span class="p">,</span><span class="w"> </span><span class="nx">salt</span><span class="p">,</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span><span class="w"> </span><span class="mi">64</span><span class="o">*</span><span class="mi">1024</span><span class="p">,</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="mi">32</span><span class="p">)</span>
@@ -850,7 +850,10 @@
 code of <code>golang.org/x/crypto/argon2</code>, plus an Advanced SIMD (NEON) kernel for the
 BLAMKA compression function on arm64, where the standard package runs scalar Go.
 <code>Key</code> and <code>IDKey</code> are the same functions with the same results; only the speed
-differs. Written from the <a href="https://github.com/go-encryptions/argon2">README</a>.</p>
+differs. One difference in failure: <code>keyLen == 0</code> panics with
+<code>argon2: key length too small</code>, where <code>x/crypto/argon2</code> (v0.59.0) crashes with a
+nil-pointer dereference. As in <code>x/crypto</code>, <code>time == 0</code> and <code>threads == 0</code> also
+panic. Written from the <a href="https://github.com/go-encryptions/argon2">README</a>.</p>
 <table>
 <thead>
 <tr>

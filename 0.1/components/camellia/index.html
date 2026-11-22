@@ -709,6 +709,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#not-constant-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not constant-time
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#verification" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -924,6 +935,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#not-constant-time" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Not constant-time
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#verification" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -978,6 +1000,13 @@ be the same slice (in-place), and a buffer shorter than 16 bytes panics.</p>
 <span class="p">}</span>
 <span class="nx">block</span><span class="p">.</span><span class="nx">Encrypt</span><span class="p">(</span><span class="nx">ct</span><span class="p">[:</span><span class="mi">16</span><span class="p">],</span><span class="w"> </span><span class="nx">pt</span><span class="p">[:</span><span class="mi">16</span><span class="p">])</span>
 </code></pre></div>
+<h2 id="not-constant-time">Not constant-time</h2>
+<p>The F-function is eight look-ups in a shared 16 KiB table of 64-bit words,
+indexed by bytes that depend on the key and the cipher state. Those look-ups use
+secret-dependent addresses, so <strong>table lookups are not constant-time</strong>: the
+cipher is exposed to cache-timing attacks by a local attacker, such as another
+process or VM on the same host. The key schedule is not constant-time either. Do
+not use it where that matters.</p>
 <h2 id="verification">Verification</h2>
 <ul>
 <li>The three vectors of RFC 3713 Appendix A (128-, 192- and 256-bit keys).</li>
