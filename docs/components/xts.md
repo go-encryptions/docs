@@ -32,6 +32,14 @@ c.DecryptSectors(plaintext, ciphertext, 512, firstSector)
 c.EncryptSectors(ciphertext, plaintext, 512, firstSector)
 ```
 
+- `NewCipher` refuses a key whose two halves are equal (`xts.ErrEqualKeys`), as
+  IEEE 1619-2018 section 5.1 and FIPS 140-3 IG C.I require; `x/crypto/xts`
+  accepts it. `NewCipherAllowEqualKeys` is the same constructor without that
+  check, for reading data written under such a key (v0.4.0).
+- The AES assembly path is taken only after the constructor has been probed with
+  the zero key and both real key halves, so a wrapper that changes the key before
+  calling `aes.NewCipher` falls back to the portable path. On amd64 it also
+  needs SSE4.1 as well as AES-NI.
 - Buffers must be a whole number of 16-byte blocks, at least one block long:
   the `x/crypto/xts` contract.
 - `DecryptSectors` and `EncryptSectors` give exactly what `Decrypt` and

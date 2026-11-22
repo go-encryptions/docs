@@ -46,7 +46,9 @@ The returned value is a standard [`cipher.AEAD`](https://pkg.go.dev/crypto/ciphe
 - `Overhead() int` — bytes `Seal` appends after the ciphertext (the tag).
 - `Seal(dst, nonce, plaintext, additionalData []byte) []byte` — encrypts and
   authenticates `plaintext`, authenticates `additionalData`, appends the result
-  to `dst`. The nonce must be `NonceSize()` bytes and unique per key.
+  to `dst`. The nonce must be `NonceSize()` bytes and unique per key. It panics
+  when `dst` and `plaintext` overlap inexactly, as `crypto/cipher` does;
+  `Seal(buf[:0], nonce, buf, ad)` (exact overlap, in place) is allowed (v0.1.2).
 - `Open(dst, nonce, ciphertext, additionalData []byte) ([]byte, error)` —
   verifies and decrypts. On a tag mismatch it returns an error and leaves `dst`
   unchanged.

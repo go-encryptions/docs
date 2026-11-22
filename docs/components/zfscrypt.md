@@ -74,8 +74,16 @@ const (
 ```go
 // DeriveWrappingKey derives the 32-byte wrapping key from the user
 // passphrase via PBKDF2-HMAC-SHA1. iters and salt come from the
-// DSL_CRYPTO_KEY object.
+// DSL_CRYPTO_KEY object. iters is untrusted: the work is charged to a
+// kdfbudget.Default budget first, so a count above 2^31 (OpenZFS has a
+// minimum of 100000 but no maximum) is refused with ErrLimit before any
+// hashing.
 func DeriveWrappingKey(passphrase, salt []byte, iters int) ([]byte, error)
+
+// DeriveWrappingKeyBudget is DeriveWrappingKey with the caller's
+// *kdfbudget.Budget (kdfbudget.Unlimited() for a trusted header; a nil
+// budget refuses). Added in v0.2.0.
+func DeriveWrappingKeyBudget(passphrase, salt []byte, iters int, b *kdfbudget.Budget) ([]byte, error)
 
 // Unwrap decrypts the wrapped (MEK || HMAC-key) blob with the
 // wrapping key, returning the 32-byte MEK and 32-byte HMAC key.
@@ -126,6 +134,7 @@ for CCM suites or `cipher.NewGCMWithNonceSize(block, 12)` for GCM — then splic
 
 Standard library (`crypto/aes`, `crypto/cipher`, `crypto/hkdf`, `crypto/hmac`,
 `crypto/pbkdf2`, `crypto/sha1`, `crypto/sha512`) plus this org's own
-[`ccm`](ccm.md) for the CCM suites. No `golang.org/x/crypto`.
+[`ccm`](ccm.md) for the CCM suites and [`kdfbudget`](kdfbudget.md) to bound the
+PBKDF2 work. No `golang.org/x/crypto`.
 
 Requires **Go 1.25** or newer.

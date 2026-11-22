@@ -39,6 +39,15 @@ if err != nil {
 block.Encrypt(ct[:16], pt[:16])
 ```
 
+## Not constant-time
+
+The F-function is eight look-ups in a shared 16 KiB table of 64-bit words,
+indexed by bytes that depend on the key and the cipher state. Those look-ups use
+secret-dependent addresses, so **table lookups are not constant-time**: the
+cipher is exposed to cache-timing attacks by a local attacker, such as another
+process or VM on the same host. The key schedule is not constant-time either. Do
+not use it where that matters.
+
 ## Verification
 
 - The three vectors of RFC 3713 Appendix A (128-, 192- and 256-bit keys).
