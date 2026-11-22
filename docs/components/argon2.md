@@ -1,6 +1,6 @@
 # argon2 — Argon2 with a NEON kernel
 
-`github.com/go-encryptions/argon2` (v0.1.1)
+`github.com/go-encryptions/argon2` (v0.1.2)
 
 ```go
 import "github.com/go-encryptions/argon2"
@@ -12,7 +12,10 @@ Argon2 ([RFC 9106](https://www.rfc-editor.org/rfc/rfc9106.html)): the API and th
 code of `golang.org/x/crypto/argon2`, plus an Advanced SIMD (NEON) kernel for the
 BLAMKA compression function on arm64, where the standard package runs scalar Go.
 `Key` and `IDKey` are the same functions with the same results; only the speed
-differs. Written from the [README](https://github.com/go-encryptions/argon2).
+differs. One difference in failure: `keyLen == 0` panics with
+`argon2: key length too small`, where `x/crypto/argon2` (v0.59.0) crashes with a
+nil-pointer dereference. As in `x/crypto`, `time == 0` and `threads == 0` also
+panic. Written from the [README](https://github.com/go-encryptions/argon2).
 
 | Platform | BLAMKA |
 |---|---|
