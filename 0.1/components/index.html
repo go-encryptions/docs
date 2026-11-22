@@ -818,6 +818,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="unixcrypt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    unixcrypt — crypt(3) password hashes
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -976,6 +1004,12 @@ arm64, with a portable path everywhere else.</p>
 <td><code>github.com/go-encryptions/streebog</code></td>
 <td>primitive</td>
 <td>The Streebog hash (GOST R 34.11-2012 / RFC 6986), 256 and 512 bits, as a <code>hash.Hash</code> that marshals its state. Pure Go, table-driven.</td>
+</tr>
+<tr>
+<td><a href="unixcrypt/"><code>unixcrypt</code></a></td>
+<td><code>github.com/go-encryptions/unixcrypt</code></td>
+<td>primitive</td>
+<td>The crypt(3) password hashes MD5-crypt, SHA-256/512-crypt and bcrypt (<code>$2a$</code>/<code>$2b$</code>/<code>$2x$</code>/<code>$2y$</code>), checked against <code>openssl passwd</code> and the OpenBSD and crypt_blowfish vectors. Pure Go.</td>
 </tr>
 </tbody>
 </table>
