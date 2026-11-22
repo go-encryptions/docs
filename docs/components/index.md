@@ -20,6 +20,7 @@ arm64, with a portable path everywhere else.
 | [`twofish`](twofish.md) | `github.com/go-encryptions/twofish` | primitive | The Twofish block cipher (16/24/32-byte keys) as a `cipher.Block`, with optional `EncryptBlocks`/`DecryptBlocks`. Pure Go, table-driven. |
 | [`whirlpool`](whirlpool.md) | `github.com/go-encryptions/whirlpool` | primitive | The Whirlpool-512 hash (ISO/IEC 10118-3) as a `hash.Hash` that marshals its state. Table-driven Go with arm64 and amd64 kernels (AVX-512 on amd64, 1.27x faster than Botan on one core). |
 | [`streebog`](streebog.md) | `github.com/go-encryptions/streebog` | primitive | The Streebog hash (GOST R 34.11-2012 / RFC 6986), 256 and 512 bits, as a `hash.Hash` that marshals its state. Pure Go, table-driven. |
+| [`unixcrypt`](unixcrypt.md) | `github.com/go-encryptions/unixcrypt` | primitive | The crypt(3) password hashes MD5-crypt, SHA-256/512-crypt and bcrypt (`$2a$`/`$2b$`/`$2x$`/`$2y$`), checked against `openssl passwd` and the OpenBSD and crypt_blowfish vectors. Pure Go. |
 
 ## Dependency graph
 
