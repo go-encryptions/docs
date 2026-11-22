@@ -545,6 +545,34 @@
   
   
     <li class="md-nav__item">
+      <a href="kdfbudget/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    kdfbudget — KDF work bound
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="argon2/" class="md-nav__link">
         
   
@@ -888,6 +916,12 @@ arm64, with a portable path everywhere else.</p>
 <td><code>github.com/go-encryptions/hmac</code></td>
 <td>primitive</td>
 <td>HMAC whose keyed state can be wiped, plus PBKDF2 (RFC 8018). <code>Wipe</code> zeroes the precomputed pads and overwrites the live digests, and the page says what it cannot reach. Byte-identical to <code>crypto/hmac</code>; level with it at 64 B and 4 KiB on an Apple M4 Max (v0.1.0).</td>
+</tr>
+<tr>
+<td><a href="kdfbudget/"><code>kdfbudget</code></a></td>
+<td><code>github.com/go-encryptions/kdfbudget</code></td>
+<td>primitive</td>
+<td>One shared bound on the total key-derivation work of an unlock: every PBKDF2, Argon2 or hash-chain run is charged before it is spent, in comparable work units, and refused with <code>ErrLimit</code> when the total does not fit (v0.1.0).</td>
 </tr>
 <tr>
 <td><a href="argon2/"><code>argon2</code></a></td>
