@@ -52,3 +52,4 @@ nav:
       - "twofish — Twofish block cipher": components/twofish.md
       - "whirlpool — Whirlpool-512 hash": components/whirlpool.md
       - "streebog — Streebog hash": components/streebog.md
+      - "unixcrypt — crypt(3) password hashes": components/unixcrypt.md
