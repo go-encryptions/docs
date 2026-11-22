@@ -42,6 +42,7 @@ nav:
       - "xts — XTS-AES": components/xts.md
       - "cbc — AES-CBC": components/cbc.md
       - "ctr — AES-CTR": components/ctr.md
+      - "hmac — wipeable HMAC": components/hmac.md
       - "argon2 — Argon2": components/argon2.md
       - "ccm — AES-CCM AEAD": components/ccm.md
       - "zfscrypt — OpenZFS encryption core": components/zfscrypt.md
